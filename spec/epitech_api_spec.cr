@@ -2,6 +2,7 @@ require "./spec_helper"
 
 describe EpitechApi do
   describe ".sign_in" do
+    # TODO: Find a way to reset module variable so tests passes even when not 1st
     context "with invalid credentials" do
       it "should not set the access token and return nil" do
         tok = EpitechApi.sign_in(login: "fake_f", password: "notarealpass")
