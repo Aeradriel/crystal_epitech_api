@@ -8,9 +8,18 @@ module EpitechApi
 
   @@access_token : String?
 
+  def self.access_token
+    @@access_token
+  end
+
   def self.sign_in(login : String, password : String , remember_me : String = "on")
     response = EpitechApi.request(SIGN_IN_PATH, login: login, password: password, remember_me: remember_me)
-    @@access_token = JSON.parse(response.body)["access_token"].to_s
+    json = JSON.parse(response.body)
+    if json.["access_token"]?
+      @@access_token = JSON.parse(response.body)["access_token"].to_s
+    else
+      nil
+    end
   end
 
   def self.request(route : NamedTuple(method: String, path: String), **args)
