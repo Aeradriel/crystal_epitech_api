@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Aeradriel/epitech_api.svg?branch=master)](https://travis-ci.org/Aeradriel/epitech_api)
+
 # epitech_api
 
 TODO: Write a description here
