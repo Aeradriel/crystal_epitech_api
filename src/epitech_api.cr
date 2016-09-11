@@ -23,7 +23,7 @@ module EpitechApi
   end
 
   def self.request(route : NamedTuple(method: String, path: String), **args)
-    url = BASE_URL + route[:path] + "?format=json"
+    url = BASE_URL + route[:path].gsub("//", "/") + "?format=json"
     url += "&access_token=#{@@access_token}" if @@access_token
     if route[:method] == "post"
       args_str = self.named_tuple_to_args(args)
