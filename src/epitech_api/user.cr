@@ -57,7 +57,7 @@ module EpitechApi
           end
         end
       end
-      marks
+      @marks = marks
     end
 
     # Retrieve the infos of the user. It returns an Hash
