@@ -22,10 +22,9 @@ module EpitechApi
   # EpitechApi.sign_in("roche_t", "fakepass", "on") # : String
   #```
   def self.sign_in(login : String, password : String , remember_me : String = "on")
-    response = EpitechApi.request(SIGN_IN_PATH, login: login, password: password, remember_me: remember_me)
-    json = JSON.parse(response.body)
+    json = EpitechApi.request(SIGN_IN_PATH, login: login, password: password, remember_me: remember_me)
     if json.["access_token"]?
-      @@access_token = JSON.parse(response.body)["access_token"].to_s
+      @@access_token = json["access_token"].to_s
     else
       nil
     end
@@ -35,17 +34,18 @@ module EpitechApi
   # You can pass arguments that will be submitted in POST requests as named tuple.
   #
   #```
-  # EpitechApi.request(SIGN_IN_PATH, login: login, password: password, remember_me: remember_me) # : HTTP::Client::Response
+  # EpitechApi.request(SIGN_IN_PATH, login: login, password: password, remember_me: remember_me) # : JSON::Any
   #```
   def self.request(route : NamedTuple(method: String, path: String), **args)
     url = BASE_URL + route[:path].gsub("//", "/") + "?format=json"
     url += "&access_token=#{@@access_token}" if @@access_token
     if route[:method] == "post"
       args_str = self.named_tuple_to_args(args)
-      HTTP::Client.post_form(url, args_str)
+      resp = HTTP::Client.post_form(url, args_str)
     else
-      HTTP::Client.get(url)
+      resp = HTTP::Client.get(url)
     end
+    JSON.parse(resp.body) rescue {} of JSON::Any => JSON::Any
   end
 
   # Converts a named tuple into a string ready for being used in an HTTP::Request.

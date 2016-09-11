@@ -73,8 +73,7 @@ module EpitechApi
     # marks = user.retrieve_marks # : Array(Mark)
     # ```
     def retrieve_marks
-      response = EpitechApi.request(user_path(MARKS_PATH))
-      json = JSON.parse(response.body) rescue {} of JSON::Any => JSON::Any
+      json = EpitechApi.request(user_path(MARKS_PATH))
       marks = [] of Mark
       if json["notes"]? && json["notes"].as_a?
         json["notes"].as_a.each do |mark|
