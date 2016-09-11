@@ -33,6 +33,36 @@ module EpitechApi
     def initialize(@login)
     end
 
+    # Returns the number of times the student got -42
+    #
+    #```
+    # count = user.cheat_count # : Int64
+    #```
+    def cheat_count
+      count = 0
+      @marks.each do |mark|
+        count += 1 if mark.final_note == -42
+      end
+      count
+    end
+
+    # Returns the number of times the student got -21
+    #
+    #```
+    # count = user.missed_count # : Int64
+    #```
+    def missed_count
+      count = 0
+      @marks.each do |mark|
+        count += 1 if mark.final_note == -21
+      end
+      count
+    end
+
+    def marks
+      @marks
+    end
+
     # Retrieve the marks of the user. It returns an array of `Mark`
     # and populates @marks.
     #
@@ -84,6 +114,8 @@ module EpitechApi
     # user.synchronize
     # ```
     def synchronize
+      self.retrieve_infos
+      self.retrieve_marks
     end
 
     # Returns a complete path for the given route scoped to the user.

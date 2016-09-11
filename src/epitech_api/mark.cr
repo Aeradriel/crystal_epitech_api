@@ -13,5 +13,9 @@ module EpitechApi
 
     def initialize(@title, @date, @final_note, @comment = "", @correcteur = "")
     end
+
+    def final_note
+      @final_note
+    end
   end
 end
