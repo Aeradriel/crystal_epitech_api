@@ -10,7 +10,7 @@ module EpitechApi
 
   @@access_token : String?
 
-  # Getter for the access token
+  # Getter for @access token
   def self.access_token
     @@access_token
   end

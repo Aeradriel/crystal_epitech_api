@@ -59,6 +59,7 @@ module EpitechApi
       count
     end
 
+    # Getter for @marks
     def marks
       @marks
     end
@@ -89,6 +90,32 @@ module EpitechApi
       @marks = marks
     end
 
+    # Retrieve the modules of the user. It returns an array of `Module`
+    # and populates @modules.
+    #
+    # This method uses blocking network operations.
+    #
+    # ```
+    # user = User.new("roche_t")
+    # modules = user.retrieve_modules # : Array(Modules)
+    # ```
+    def retrieve_modules
+      #json = EpitechApi.request(user_path(MARKS_PATH))
+      #marks = [] of Mark
+      #if json["notes"]? && json["notes"].as_a?
+      #  json["notes"].as_a.each do |mark|
+      #    if mark.is_a? Hash
+      #      date = Time.parse(mark["date"].to_s, "%F %H:%M:%S")
+      #      note = mark["final_note"].as? Float64
+      #      note ||= mark["final_note"].as(Int64).to_f
+      #      marks << Mark.new(mark["title"].to_s, date, note,
+      #                        mark["comment"].to_s, mark["correcteur"].to_s)
+      #    end
+      #  end
+      #end
+      #@marks = marks
+    end
+
     # Retrieve the infos of the user. It returns an Hash
     # and populates the user's infos.
     #
@@ -115,6 +142,7 @@ module EpitechApi
     def synchronize
       self.retrieve_infos
       self.retrieve_marks
+      self.retrieve_modules
     end
 
     # Returns a complete path for the given route scoped to the user.
