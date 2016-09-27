@@ -64,6 +64,11 @@ module EpitechApi
       @marks
     end
 
+    # Getter for @modules
+    def modules
+      @modules
+    end
+
     # Retrieve the marks of the user. It returns an array of `Mark`
     # and populates @marks.
     #
@@ -100,20 +105,20 @@ module EpitechApi
     # modules = user.retrieve_modules # : Array(Modules)
     # ```
     def retrieve_modules
-      #json = EpitechApi.request(user_path(MARKS_PATH))
-      #marks = [] of Mark
-      #if json["notes"]? && json["notes"].as_a?
-      #  json["notes"].as_a.each do |mark|
-      #    if mark.is_a? Hash
-      #      date = Time.parse(mark["date"].to_s, "%F %H:%M:%S")
-      #      note = mark["final_note"].as? Float64
-      #      note ||= mark["final_note"].as(Int64).to_f
-      #      marks << Mark.new(mark["title"].to_s, date, note,
-      #                        mark["comment"].to_s, mark["correcteur"].to_s)
-      #    end
-      #  end
-      #end
-      #@marks = marks
+      json = EpitechApi.request(user_path(MARKS_PATH))
+      modules = [] of Module
+      if json["modules"]? && json["modules"].as_a?
+       json["modules"].as_a.each do |mod|
+         if mod.is_a? Hash
+           codemodule = mod["codemodule"].as(String)
+           codeinstance = mod["codeinstance"].as(String)
+           title = mod["title"].as(String)
+           credits = mod["credits"].as(Int64).to_i
+           modules << Module.new(codemodule, codeinstance, title, credits)
+         end
+       end
+      end
+      @modules = modules
     end
 
     # Retrieve the infos of the user. It returns an Hash
@@ -141,8 +146,8 @@ module EpitechApi
     # ```
     def synchronize
       self.retrieve_infos
-      self.retrieve_marks
       self.retrieve_modules
+      self.retrieve_marks
     end
 
     # Returns a complete path for the given route scoped to the user.
